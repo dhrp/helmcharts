@@ -49,7 +49,7 @@ ingress:
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: 195.114.30.198.xip.io
+    - host: consul.tools.opensource.tools
       paths: ["/"]
   tls: []
   #  - secretName: chart-example-tls
