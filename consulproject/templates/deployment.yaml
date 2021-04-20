@@ -27,6 +27,30 @@ spec:
       serviceAccountName: {{ include "consulproject.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: rake-tasks
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          command:
+            [
+              "sh",
+              "-c",
+              "rake db:create && rake db:migrate && rake db:seed && rake assets:precompile",
+            ]
+          volumeMounts:
+            - name: database-config
+              mountPath: /var/www/consul/config/database.yml
+              subPath: database.yml
+            # - name: secrets-yml
+            #   mountPath: /var/www/consul/config/secrets.yml
+            #   subPath: secrets.yml
+            - name: precompiled
+              mountPath: /var/www/consul/public/assets
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-auth
+                  key: password
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
@@ -51,16 +75,17 @@ spec:
             - name: database-config
               mountPath: /var/www/consul/config/database.yml
               subPath: database.yml
-            - name: secrets-yml
-              mountPath: /var/www/consul/config/secrets.yml
-              subPath: secrets.yml
+            # - name: secrets-yml
+            #   mountPath: /var/www/consul/config/secrets.yml
+            #   subPath: secrets.yml
+            - name: precompiled
+              mountPath: /var/www/consul/public/assets
           env:
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: postgres-auth
                   key: password
-
       volumes:
         - name: database-config
           configMap:
@@ -68,6 +93,8 @@ spec:
         - name: secrets-yml
           secret:
             secretName: secrets-yml
+        - name: precompiled # for letting the init container precompile
+          emptyDir: {}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
