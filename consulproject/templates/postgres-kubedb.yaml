@@ -1,7 +1,7 @@
 apiVersion: kubedb.com/v1alpha2
 kind: Postgres
 metadata:
-  name: postgres
+  name: {{ .Release.Name }}-postgres
 spec:
   version: "11.11"
   storageType: Durable

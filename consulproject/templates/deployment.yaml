@@ -46,10 +46,12 @@ spec:
             - name: precompiled
               mountPath: /var/www/consul/public/assets
           env:
+            - name: POSTGRES_HOST
+              value: {{ .Release.Name }}-postgres
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgres-auth
+                  name: {{ .Release.Name }}-postgres-auth
                   key: password
       containers:
         - name: {{ .Chart.Name }}
@@ -81,18 +83,22 @@ spec:
             - name: precompiled
               mountPath: /var/www/consul/public/assets
           env:
+            - name: POSTGRES_HOST
+              value: {{ .Release.Name }}-postgres
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgres-auth
+                  name: {{ .Release.Name }}-postgres-auth
                   key: password
+            - name: RAILS_ENV
+              value: development
       volumes:
         - name: database-config
           configMap:
-            name: database-config
+            name: {{ .Release.Name }}-dbconf
         - name: secrets-yml
           secret:
-            secretName: secrets-yml
+            secretName: {{ .Release.Name }}-secrets
         - name: precompiled # for letting the init container precompile
           emptyDir: {}
       {{- with .Values.nodeSelector }}
