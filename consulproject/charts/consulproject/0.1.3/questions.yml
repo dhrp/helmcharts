@@ -27,7 +27,7 @@ questions:
     required: true
     label: Consul Service Type
     show_subquestion_if: "NodePort"
-    group: "Services and Load Balancing"
+    group: "NodePort"
     subquestions:
       - variable: service.nodePorts.http
         default: ""
