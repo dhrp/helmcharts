@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-dbconf
+data:
+  database.yml: |-
+{{ .Files.Get "database.yml" | indent 4 }}
