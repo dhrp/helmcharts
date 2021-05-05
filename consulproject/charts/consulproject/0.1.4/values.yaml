@@ -48,8 +48,8 @@ ingress:
     {}
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
-  hostsname: consul.tools.opensource.tools
-  tls: false
+  hostname: consul.tools.opensource.tools
+  tlsEnabled: false
 
 resources:
   {}

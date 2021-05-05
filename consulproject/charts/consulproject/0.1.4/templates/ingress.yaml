@@ -11,13 +11,13 @@ metadata:
   name: {{ $fullName }}
   labels:
     {{- include "consulproject.labels" . | nindent 4 }}
-  {{- if .Values.ingress.tls }}
+  {{- if .Values.ingress.tlsEnabled }}
   annotations:
     kubernetes.io/ingress.class: nginx
     kubernetes.io/tls-acme: "true"
   {{- end }}
 spec:
-  {{- if .Values.ingress.tls }}
+  {{- if .Values.ingress.tlsEnabled }}
   tls:
     - hosts:
         - {{ .Values.ingress.hostname | quote }}
