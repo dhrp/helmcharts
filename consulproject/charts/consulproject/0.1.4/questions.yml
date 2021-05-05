@@ -2,14 +2,14 @@ categories:
   - Participation Platform
 questions:
   - variable: ingress.enabled
+    group: "Services and Load Balancing"
     default: true
     description: "Expose app using Layer 7 Load Balancer - ingress"
     type: boolean
     label: Expose app using Layer 7 Load Balancer
     show_subquestion_if: true
-    group: "Services and Load Balancing"
     subquestions:
-      - variable: ingress.hostname
+      - variable: ingress.hosts[0].host
         default: "xip.io"
         description: "Hostname to your Consul installation"
         type: hostname
@@ -19,29 +19,18 @@ questions:
     default: "NodePort"
     description: "Consul Service type"
     type: enum
-    show_if: "ingress.enabled=false"
     options:
       - "ClusterIP"
       - "NodePort"
-      - "LoadBalancer"
     required: true
-    label: Consul Service Type
-    show_subquestion_if: "service.type=NodePort"
+    label: Docker Registry Service Type
+    show_subquestion_if: "NodePort"
     group: "Services and Load Balancing"
     subquestions:
-      - variable: service.nodePorts.http
+      - variable: service.nodePort
         default: ""
         description: "NodePort http port(to set explicitly, choose port between 30000-32767)"
         type: int
         min: 30000
         max: 32767
-        show_if: "ingress.enabled=false&&serviceType=NodePort"
         label: NodePort Http Port
-      - variable: service.nodePorts.https
-        default: ""
-        description: "NodePort https port(to set explicitly, choose port between 30000-32767)"
-        type: int
-        min: 30000
-        max: 32767
-        show_if: "ingress.enabled=false&&serviceType=NodePort"
-        label: NodePort Https Port
