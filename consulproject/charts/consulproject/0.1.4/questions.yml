@@ -9,27 +9,22 @@ questions:
     label: Expose app using Layer 7 Load Balancer
     show_subquestion_if: true
     subquestions:
-      - variable: ingress.hosts[0].host
+      - variable: ingress.hostname
         default: "xip.io"
         description: "Hostname to your Consul installation"
         type: hostname
         required: true
         label: Hostname
-      - variable: ingress.hosts[0].path
-        default: "/"
-        description: "URL (sub)path"
-        type: string
-        required: true
-        label: Path
   - variable: service.type
     default: "NodePort"
     description: "Consul Service type"
     type: enum
+    show_if: "ingress.enabled=false"
     options:
       - "ClusterIP"
       - "NodePort"
     required: true
-    label: Docker Registry Service Type
+    label: Service Type
     show_subquestion_if: "NodePort"
     group: "Services and Load Balancing"
     subquestions:
