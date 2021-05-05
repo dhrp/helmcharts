@@ -27,7 +27,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    - host: {{ ingress.hostname | quote }}
+    - host: {{ .Values.ingress.hostname | quote }}
       http:
         paths:
           - path: "/"
