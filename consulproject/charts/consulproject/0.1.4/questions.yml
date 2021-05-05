@@ -15,8 +15,13 @@ questions:
         type: hostname
         required: true
         label: Hostname
+      - variable: ingress.tlsEnabled
+        default: true
+        description: "Enable LetsEncrypt annotations for TLS"
+        type: boolean
+        label: Use TLS?
   - variable: service.type
-    default: "NodePort"
+    default: "ClusterIP"
     description: "Consul Service type"
     type: enum
     show_if: "ingress.enabled=false"
