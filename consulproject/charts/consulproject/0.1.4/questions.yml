@@ -15,6 +15,12 @@ questions:
         type: hostname
         required: true
         label: Hostname
+      - variable: ingress.hosts[0].path
+        default: "/"
+        description: "URL (sub)path"
+        type: string
+        required: true
+        label: Path
   - variable: service.type
     default: "NodePort"
     description: "Consul Service type"
